@@ -14,7 +14,7 @@
         </ul>
         <h2><u>Keyboard Shortcuts</u></h2>
         FastEdit provides easy keyboard shortcuts to save time from clicking any menuitem.
-        <h3>Here is the list of all keyboard shortcuts</h3>
+        <p>Here is the list of all keyboard shortcuts</p>
         <ul>
             <li><b>Ctrl+N</b> to create a new file.</li>
             <li><b>Ctrl+O</b> to open a existing file from directory.</li>
