@@ -1,5 +1,6 @@
 <h1> SM FastEdit </h1>
         <p> FastEdit is a open source texteditor created and maintained by SM Technology. It is best for JS and PYTHON programmers. Dark mode of editor makes it perfect environment for coding.</p>
+        <img src="editorScreenShot1.png">
         <h2><u>Features that make editor perfect are:</u></h2>
         <ul>
             <li>Read only mode.</li>
