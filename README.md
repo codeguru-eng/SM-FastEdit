@@ -47,4 +47,4 @@
         <p> Source code is available in github website. Click <a href="https://github.com/codeguru-eng/FastEdit/">here</a> to go there.</p>
         <h2> Note</h2>
         <p>Some features will not work because currently it is under development. But don't worry because important features will work.</p>
-        <a href="#" class="button">Post comment (link)</a>
+        <button class="button" type="submit">Post comment (button)</button>
