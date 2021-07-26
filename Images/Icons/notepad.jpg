@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Shaurya Mishra: Home</title>
+	<link rel="stylesheet" type="text/css" href="app.css">
+</head>
+<body>
+	<div class="frame1">
+		<div class="navbar">
+			<a href="#" class="active">Home</a>
+			<a href="#">About</a>
+			<a href="#">Contact</a>
+			<a href="#">Services</a>
+			<a href="#">More</a>
+		</div>
+		<div class="main1">
+			<div class="content1">
+				<img src="programmer.jpg" class="img1">
+				<div class="aboutText">
+					I am a programmer and this is my portfolio website created by me. I have been creating and publishing applications since I was 12 years old.<br>
+					<button class="btn">About me</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="frame2">
+		<div class="content1">
+			<h1>My life</h1>
+			<hr>
+		</div>
+	</div>
+</body>
+</html>
