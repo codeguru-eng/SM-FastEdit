@@ -1,0 +1,2 @@
+SM FastEdit
+FastEdit is a open source sollution for fast programmers and beginers.
