@@ -173,6 +173,7 @@ class mainWindow(QMainWindow):
 		a5.clicked.connect(self.save_file)
 		self.toolBarMain.addWidget(a5)
 
+
 		# completer
 		suggestions = [
 			'html','head','meta','link','class','type','href','src','script','body','div','pre','button','a'
@@ -335,7 +336,6 @@ class mainWindow(QMainWindow):
 
 		self.run.setShortcut("F5")
 
-		docum.setShortcut("Ctrl+?")
 	# functions
 		leave.triggered.connect(self.exit)
 		new_window.triggered.connect(self.new_window)
@@ -491,7 +491,7 @@ class mainWindow(QMainWindow):
 		text = f"""
 FastEdit is a open source texteditor created and maintained by SM Technology. It is only for PYTHON programmers.
 Visit smtechnology.com/applications to know more.
-	Version: 1.0
+	Version: 1.1
 
 © Copyright 2021 SM Technology
 		"""
@@ -706,6 +706,7 @@ Visit smtechnology.com/applications to know more.
 				split_tUp = os.path.splitext(self.path)
 				file_ext = split_tUp[1]
 				self.b.setText(file_ext)
+				self.bText = self.b.text()
 	def save_file(self):
 		if self.path is "untitled":
 			return self.save_as_file()
@@ -764,6 +765,8 @@ Visit smtechnology.com/applications to know more.
 		highlighted_line.cursor = self.textArea.textCursor()
 		highlighted_line.cursor.clearSelection()
 		self.textArea.setExtraSelections([highlighted_line])
+	
+	
 
 if __name__ == "__main__":
 	app = QApplication(sys.argv)
