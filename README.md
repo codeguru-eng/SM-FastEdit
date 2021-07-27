@@ -50,3 +50,6 @@
         <h2> Note</h2>
         <p>Some features will not work because currently it is under development. But don't worry because important features will work.</p>
         <a class="button" href="https://github.com/codeguru-eng/SM-FastEdit/">Download for Windows</a>
+        <h2> What is new in Version 1.1</h2>
+        <p> New widget in status bar: Find text </p>
+        <img src="findShot.png">
