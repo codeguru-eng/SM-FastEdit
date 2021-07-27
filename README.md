@@ -1,6 +1,6 @@
-<pre>Not Updated</pre>
+<pre>Version 1.1</pre>
 
-<h1> SM FastEdit </h1>
+<h1> SM FastEdit-1 </h1>
         <p> FastEdit is a open source texteditor created and maintained by SM Technology. It is best for web developers. Dark mode of editor makes it perfect environment for coding.</p>
         <img src="editorScreenShot1.png">
         <h2><u>Features that make editor perfect are:</u></h2>
