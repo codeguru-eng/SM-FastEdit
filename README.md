@@ -45,7 +45,7 @@
             <li><b>Programmer:</b> Shaurya Mishra</li>
             <li><b>Application type:</b> Text editor</li>
         </ul>
-        <p> Source code is available in github website. Click <a href="https://github.com/codeguru-eng/FastEdit/">here</a> to go there.</p>
+        <p> Source code is available in github website. Click <a href="https://github.com/codeguru-eng/SM-FastEdit/blob/main/form.py">here</a> to go there.</p>
         <h2> What is new in Version 1.1</h2>
         <p> New widget in status bar: Find text </p>
         <img src="findShot.png">
