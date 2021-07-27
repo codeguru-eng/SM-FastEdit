@@ -31,7 +31,6 @@
             <li><b>Ctrl+C</b> for copy action.</li>
             <li><b>Ctrl+P</b> for paste action.</li>
             <li><b>Ctrl+A</b> to select all text.</li>
-            <li><b>Ctrl+F</b> to find any text in editor.</li>
             <li><b>Ctrl+Shift+R</b> to make editor readonly.</li>
             <li><b>Ctrl+?</b> for help.</li>
         </ul>
