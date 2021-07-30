@@ -17,6 +17,7 @@ import LineNumberBar
 import webbrowser
 import ToolBar
 
+version = "1.1"
 FullScreen = "Full Screen"
 disableAction = """
 QAction {
@@ -491,7 +492,7 @@ class mainWindow(QMainWindow):
 		text = f"""
 FastEdit is a open source texteditor created and maintained by SM Technology. It is only for PYTHON programmers.
 Visit smtechnology.com/applications to know more.
-	Version: 1.1
+	Version: {version}
 
 © Copyright 2021 SM Technology
 		"""
