@@ -7,16 +7,26 @@
 * {
     font-family: verdana;
 }
-.img1 {
-    width: 200vh;
+img {
+    width: 100%;
 }
 </style>
 <body>
+	<div class="navbar">
+		<a href="#home">Home</a>
+		<a href="#about">About</a>
+		<a href="#features">Features</a>
+		<a href="#help">Help</a>
+		<a href="#code">Source Code</a>
+		<a href="#new">What's New</a>
+	</div>
     <div>
-        <h1> SM FastEdit-1 </h1>
-        <p> FastEdit is a open source texteditor created and maintained by SM Technology. It is best for web developers. Dark mode of editor makes it perfect environment for coding.</p>
-        <img class="img1" src="screenShot2.png">
-        <h2><u>Features that make editor perfect are:</u></h2>
+        <h1 id="home"> SM FastEdit-1 </h1>
+        <p id="about"> FastEdit is a open source texteditor created and maintained by SM Technology. It is best for web developers. Dark mode of editor makes it perfect environment for coding.</p>
+		<center>
+        	<img class="img1" src="screenShot2.png">
+		</center>
+        <h2 id="features"><u>Features that make editor perfect are:</u></h2>
         <ul>
             <li>Read only mode.</li>
             <li>Full screen mode.</li>
@@ -47,10 +57,10 @@
             <li><b>Ctrl+Shift+R</b> to make editor readonly.</li>
             <li><b>Ctrl+?</b> for help.</li>
         </ul>
-        <p>For more help go to <button onclick="location = 'https://github.com/codeguru-eng/FastEdit/'">https://github.com/codeguru-eng/FastEdit/</button>.</p>
+        <p id="help">For more help go to <button onclick="location = 'https://github.com/codeguru-eng/FastEdit/'">https://github.com/codeguru-eng/FastEdit/</button>.</p>
         <p></p>
         <p></p>
-        <h2><u>Source code</u></h2>
+        <h2 id="code"><u>Source code</u></h2>
         <p>FastEdit is a open source and free texteditor. SM FastEdit is written in python language and used HTML for minor components of application.</p>
         <ul>    
             <li><b>Author:</b> Shaurya Mishra</li>
