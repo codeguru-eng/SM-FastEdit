@@ -23,7 +23,7 @@ class FE_ToolBar(QToolBar):
                   background: #222;
             }
             QToolBar::separator {
- 			height: 2px;
+ 			height: 4px;
  			background: #333;
  		}
             """)
