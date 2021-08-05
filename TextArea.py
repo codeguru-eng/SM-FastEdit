@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import *
-import syntax
+from syntax import *
 
 class TextEdit(QPlainTextEdit):
     """TextEdit widget for App"""
@@ -17,7 +17,8 @@ class TextEdit(QPlainTextEdit):
     def __init__(self, parent = None):
         super(TextEdit,self).__init__(parent)
         self.setPlaceholderText("Start typing...")
-        self.highlight = syntax.HTMLHighlighter(self.document())
+        self.highlighter = Highlighter(self.document())
+        self.setContextMenuPolicy(False)
         self.verticalScrollBar().setStyleSheet("""
 		QScrollBar:vertical {
 			background: #000;
@@ -62,4 +63,3 @@ class TextEdit(QPlainTextEdit):
 			min-width: 0px;
 		}
 		""")
-		
