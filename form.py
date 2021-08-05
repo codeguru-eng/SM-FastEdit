@@ -1,4 +1,3 @@
-# version 1.2.1
 from BrowserToolBar import Bar
 import os
 from PyQt5 import QtCore
@@ -289,7 +288,7 @@ class mainWindow(QMainWindow):
 		self.a = QLabel("Ln 1, Col 1")
 		self.statusBarMain.addPermanentWidget(self.a)
 		self.b = QLabel(".fe-untitled")
-		self.c = QLabel("Tab Size: 6")
+		self.c = QLabel("Tab Size: 4")
 		self.d = QPushButton()
 		self.d.setIcon(QIcon("Images/icon_more.png"))
 		moreMenu = QMenu()
@@ -431,16 +430,22 @@ class mainWindow(QMainWindow):
 		intro.triggered.connect(self.intro)
 	def tab_size1(self):
 		self.setTabSize(1)
+		self.c.setText("Tab Size: 1")
 	def tab_size2(self):
 		self.setTabSize(2)
+		self.c.setText("Tab Size: 2")
 	def tab_size3(self):
 		self.setTabSize(3)
+		self.c.setText("Tab Size: 3")
 	def tab_size4(self):
 		self.setTabSize(4)
+		self.c.setText("Tab Size: 4")
 	def tab_size5(self):
 		self.setTabSize(5)
+		self.c.setText("Tab Size: 5")
 	def tab_size6(self):
 		self.setTabSize(6)
+		self.c.setText("Tab Size: 6")
 	def setTabSize(self, size: int):
 		font = self.textArea.font()
 		fontMetrics = QFontMetricsF(font)
