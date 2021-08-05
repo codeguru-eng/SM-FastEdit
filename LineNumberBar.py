@@ -21,9 +21,9 @@ class NumberBar(QWidget):
 				self.scroll(0, scroll)
 			else:
 				self.update()
-
+			
 	def update_width(self, string):
-		width = self.fontMetrics().width(str(string)) + 12
+		width = self.fontMetrics().width(str(string)) + 20
 		if self.width() != width:
 			self.setFixedWidth(width)
 
@@ -36,7 +36,7 @@ class NumberBar(QWidget):
 			painter.fillRect(event.rect(), lineBarColor)
 			painter.drawRoundedRect(0, 0, event.rect().width(), event.rect().height(), 1, 1)
 			font = painter.font()
-			font.setPointSize(8)
+			font.setPointSize(9)
 
 			current_block = self.textArea.textCursor().block().blockNumber() + 1
 
