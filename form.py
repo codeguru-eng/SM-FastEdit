@@ -1,23 +1,28 @@
-# Author : Shaurya Mishra 
-# Writer : Shaurya Mishra
-# Additional support from : Github
+# version 1.2.1
+from BrowserToolBar import Bar
 import os
 from PyQt5 import QtCore
-from PyQt5 import QtWidgets
-from PyQt5 import QtGui
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtPrintSupport import *
 from PyQt5.QtWebEngineWidgets import *
 import sys
-import webbrowser
 import TextArea
 import LineNumberBar
 import webbrowser
 import ToolBar
+import WebBrowser
+import platform
 
-version = "1.1"
+QApplication.setApplicationName("SM FastEdit")
+QApplication.setApplicationVersion("1.2.1")
+app_name = QApplication.applicationName()
+version = QApplication.applicationVersion()
+system = platform.system()
+py = ("Python")
+py_version = platform.python_version()
+system_version = platform.version()
 FullScreen = "Full Screen"
 disableAction = """
 QAction {
@@ -36,6 +41,8 @@ class mainWindow(QMainWindow):
 		self.resize(1000,800)
 		self.setMinimumSize(500,300)
 		self.path = "untitled"
+		# settings
+		self.settings = QSettings("SM","SM Fast")
 		# menu bar
 		self.menuBarMain = self.menuBar()
 		self.setContextMenuPolicy(False)
@@ -102,7 +109,13 @@ class mainWindow(QMainWindow):
 		self.select_all = editMenu.addAction("Select All")
 		self.copy_all = editMenu.addAction("Copy All")
 		editMenu.addSeparator()
+		find = editMenu.addAction("Find")
+		editMenu.addSeparator()
 		self.clear_all = editMenu.addAction("Clear Editor")
+		copy_path = editMenu.addAction("Copy Filepath")
+		# go to menu
+		goToMenu = self.menuBarMain.addMenu("Go")
+		to_line = goToMenu.addAction("Go to Line")
 		# setting menu
 		viewMenu = self.menuBarMain.addMenu("View")
 		word_wrap = viewMenu.addAction("Word Wrap")
@@ -128,6 +141,17 @@ class mainWindow(QMainWindow):
 		editor = appearance.addAction("Show Editor Area")
 		editor.setCheckable(True)
 		editor.setChecked(True)
+		runAction = viewMenu.addMenu("Run")
+		openInBrowser2 = runAction.addAction("Open in Browser")
+		runFile = runAction.addAction("Run")
+		TabControl = viewMenu.addMenu("Tab Size")
+		size1 = TabControl.addAction("Spaces: 1")
+		size2 = TabControl.addAction("Spaces: 2")
+		size3 = TabControl.addAction("Spaces: 3")
+		size4 = TabControl.addAction("Spaces: 4")
+		size5 = TabControl.addAction("Spaces: 5")
+		size6 = TabControl.addAction("Spaces: 6")
+		viewMenu.addSeparator()
 		# Run menu
 		runMenu = self.menuBarMain.addMenu("Run")
 		self.openInBrowser = runMenu.addAction("Open in Browser")
@@ -173,24 +197,27 @@ class mainWindow(QMainWindow):
 		a5.setStatusTip("Save/Save as file")
 		a5.clicked.connect(self.save_file)
 		self.toolBarMain.addWidget(a5)
+		self.a6 = QPushButton()
+		self.a6.setCursor(cursor)
+		self.a6.setIcon(QIcon("Images\Icons\cil-trash.png"))
+		self.a6.setStatusTip("Delete file")
+		self.a6.setDisabled(True)
+		self.a6.clicked.connect(self.delete_file)
+		self.toolBarMain.addWidget(self.a6)
 
 
-		# completer
-		suggestions = [
-			'html','head','meta','link','class','type','href','src','script','body','div','pre','button','a'
-		]
-		completer = QCompleter(suggestions)
 		# text area
 		self.widget = QWidget()
 		self.setCentralWidget(self.widget)
 		layout = QHBoxLayout(self.widget)
 		layout.setContentsMargins(0,0,0,0)
 		self.textArea = TextArea.TextEdit(self.widget)
-		self.textArea.setContextMenuPolicy(True)
+		self.textArea.setContextMenuPolicy(False)
 		font = self.textArea.font()
 		fontMetrics = QFontMetricsF(font)
 		spaceWidth = fontMetrics.width('  ')
 		self.textArea.setTabStopDistance(spaceWidth * 6)
+		self.fontMetrics = QFontMetricsF(font)
 		self.textArea.setObjectName("textArea")
 		self.numbers = LineNumberBar.NumberBar(self.textArea)
 		layout.addWidget(self.numbers)
@@ -251,15 +278,17 @@ class mainWindow(QMainWindow):
             }
 		""")
 		self.a2 = QLineEdit()
+		self.a2.setStyleSheet("selection-background-color: rgba(255,255,255,0.2);")
 		self.a2.setPlaceholderText("Find...")
 		self.a2.setClearButtonEnabled(True)
 		self.a2.setFixedWidth(150)
 		self.a2_text = self.a2.text()
+		self.a2.textChanged.connect(self.find_text)
 		self.a2.returnPressed.connect(self.find_text)
 		self.statusBarMain.addPermanentWidget(self.a2)
 		self.a = QLabel("Ln 1, Col 1")
 		self.statusBarMain.addPermanentWidget(self.a)
-		self.b = QLabel(".txt")
+		self.b = QLabel(".fe-untitled")
 		self.c = QLabel("Tab Size: 6")
 		self.d = QPushButton()
 		self.d.setIcon(QIcon("Images/icon_more.png"))
@@ -331,11 +360,20 @@ class mainWindow(QMainWindow):
 		self.copy_all.setStatusTip("Copy All Text")
 		self.clear_all.setShortcut("Alt+X")
 		self.clear_all.setStatusTip("Clear Editor's Text")
+		find.setShortcut("Ctrl+F")
+
+		to_line.setShortcut("Ctrl+G")
 
 		self.read_only.setShortcut("Ctrl+Shift+R")
 		self.fullScreen.setShortcut("F11")
+		runFile.setShortcut("F5")
+		openInBrowser2.triggered.connect(self.open_in_browser)
 
 		self.run.setShortcut("F5")
+
+		tips.setShortcut("Ctrl+Shift+S")
+	#::::::::::
+		
 
 	# functions
 		leave.triggered.connect(self.exit)
@@ -359,6 +397,10 @@ class mainWindow(QMainWindow):
 		self.select_all.triggered.connect(self.SelectAll)
 		self.copy_all.triggered.connect(self.CopyAll)
 		self.clear_all.triggered.connect(self.textArea.clear)
+		copy_path.triggered.connect(self.copy_filePath)
+		find.triggered.connect(self.a2.setFocus)
+
+		to_line.triggered.connect(self.go_to_line)
 
 		word_wrap.triggered.connect(self.toggle_wrap)
 		self.read_only.triggered.connect(self.readOnly)
@@ -376,18 +418,143 @@ class mainWindow(QMainWindow):
 		showTabSize.triggered.connect(self.showTabSize)
 		hideStatusBar.triggered.connect(self.showStatusBar)
 		showEditorLang.triggered.connect(self.showEditorLang)
+		size1.triggered.connect(self.tab_size1)
+		size2.triggered.connect(self.tab_size2)
+		size3.triggered.connect(self.tab_size3)
+		size4.triggered.connect(self.tab_size4)
+		size5.triggered.connect(self.tab_size5)
+		size6.triggered.connect(self.tab_size6)
 
 		self.textArea.textChanged.connect(self.unsaved)
 
 		about.triggered.connect(self.about)
 		intro.triggered.connect(self.intro)
+	def tab_size1(self):
+		self.setTabSize(1)
+	def tab_size2(self):
+		self.setTabSize(2)
+	def tab_size3(self):
+		self.setTabSize(3)
+	def tab_size4(self):
+		self.setTabSize(4)
+	def tab_size5(self):
+		self.setTabSize(5)
+	def tab_size6(self):
+		self.setTabSize(6)
+	def setTabSize(self, size: int):
+		font = self.textArea.font()
+		fontMetrics = QFontMetricsF(font)
+		spaceWidth = fontMetrics.width(' ')
+		self.textArea.setTabStopDistance(spaceWidth * size)
+	def delete_file(self):
+		self.win = QWidget()
+		self.win.setWindowTitle("Delete file")
+		self.win.setFixedSize(QSize(500,150))
+		lbl = QLabel("Do you want to delete the file?")
+		font = QFont()
+		font.setPointSize(18)
+		lbl.setFont(font)
+		btn = QPushButton("Yes")
+		btn.setStyleSheet("padding: 10px;font-size: 15px;")
+		btn.clicked.connect(self.removeFile)
+		layout = QVBoxLayout(self.win)
+		layout.addWidget(lbl)
+		layout.addWidget(btn)
+		self.win.show()
+	def removeFile(self):
+		if self.path:
+			os.remove(self.path)
+			self.statusBarMain.showMessage(f"{self.path} is deleted.", 5000)
+			self.new_file()
+			self.win.close()
+	def go_to_line(self):
+		self.gotoWin = QWidget()
+		self.gotoWin.setFixedSize(300,50)
+		self.gotoWin.setWindowFlag(Qt.FramelessWindowHint)
+		self.gotoWin.setStyleSheet("background: #333;")
+		layout = QHBoxLayout(self.gotoWin)
+		self.go_field = QLineEdit()
+		self.go_field.setStyleSheet("padding: 12px 20px;border: none;font-size: 18px;color: #fff;")
+		self.go_field.setFocus(True)
+		self.go_field.returnPressed.connect(self.goToLine)
+		btn = QPushButton("Close")
+		btn.setStyleSheet("""
+		QPushButton {
+			padding: 12px 20px;border: none;background: #333;color: #fff;font-size: 18px;
+		}
+		QPushButton:hover {
+			background: #444;color: #fff;
+		}
+		QPushButton:pressed {
+			background: #222;color: #fff;
+		}
+		""")
+		btn.clicked.connect(self.gotoWin.close)
+		btn.setShortcut("X")
+		layout.addWidget(self.go_field)
+		layout.addWidget(btn)
+		layout.setContentsMargins(0,0,0,0)
+		self.gotoWin.show()
+	def goToLine(self):
+		ln = int(self.go_field.text())
+		linecursor = QTextCursor(self.textArea.document().findBlockByNumber(ln-1))
+		self.textArea.moveCursor(QTextCursor.End)
+		self.textArea.setTextCursor(linecursor)
+		self.gotoWin.close()
+	def copy_filePath(self):
+		self.pathWin = QWidget()
+		self.pathWin.setWindowTitle("Copy Filepath")
+		self.pathWin.setFixedSize(500,100)
+		self.lineBar = QLineEdit()
+		self.lineBar.setReadOnly(False)
+		self.lineBar.setText(self.path)
+		btn = QPushButton("Copy")
+		layout = QHBoxLayout(self.pathWin)
+		layout.addWidget(self.lineBar)
+		layout.addWidget(btn)
+		btn.clicked.connect(self.copy_path_action)
+		self.pathWin.setStyleSheet("""
+		QLineEdit {
+			padding: 15px 10px;
+			font-size: 18px;
+		}
+		QPushButton {
+			padding: 15px 30px;
+			font-size: 18px;
+		}
+		""")
+		self.pathWin.show()
+	def copy_path_action(self):
+		self.lineBar.selectAll()
+		self.lineBar.copy()
+	def open_in_browser(self):
+		if self.path:
+			self.window = QWidget()
+			layout = QVBoxLayout(self.window)
+			toolbar = Bar()
+			reload_btn = QPushButton("Reload")
+			stop_btn = QPushButton("Stop")
+			urlBar = QLineEdit()
+			urlBar.setReadOnly(True)
+			urlBar.setText(self.path)
+			toolbar.addWidget(reload_btn)
+			toolbar.addWidget(stop_btn)
+			toolbar.addWidget(urlBar)
+			self.webview = WebBrowser.Browser()
+			self.webview.load(QUrl(self.path))
+			layout.addWidget(toolbar)
+			layout.addWidget(self.webview)
+			layout.setContentsMargins(0,0,0,0)
+			reload_btn.clicked.connect(self.webview.reload)
+			stop_btn.clicked.connect(self.webview.stop)
+			self.window.setWindowTitle("Browser")
+			self.window.showMaximized()
 	def intro(self):
 		self.introWindow = QWidget()
 		self.introWindow.setWindowTitle("Source Code - Github.com - SM FastEdit")
 		layout = QVBoxLayout(self.introWindow)
-		webView = QWebEngineView()
-		webView.setZoomFactor(1.4)
-		webView.setUrl(QUrl("https://github.com/codeguru-eng/SM-FastEdit"))
+		webView = WebBrowser.Browser()
+		webView.load(QUrl("https://github.com/codeguru-eng/SM-FastEdit"))
 		layout.addWidget(webView)
 		layout.setContentsMargins(0,0,0,0)
 		self.introWindow.showMaximized()
@@ -400,14 +567,11 @@ class mainWindow(QMainWindow):
 		word = self.a2.text()
 		if self.textArea.find(word):
 			linenumber = self.textArea.textCursor().blockNumber() + 1
-			self.statusBar().showMessage("Found " + self.a2.text() + "'at Line: " + str(linenumber))
 			self.textArea.centerCursor()
 		else:
-			self.statusBar().showMessage(self.a2.text() + " not found")
 			self.textArea.moveCursor(QTextCursor.Start)
 			if self.textArea.find(word):
 				linenumber = self.textArea.textCursor().blockNumber() + 1
-				self.statusBar().showMessage("Found '" + self.a2.text() + "' at Line: " + str(linenumber))
 				self.textArea.centerCursor()
 	def unsaved(self):
 		self.statusBarMain.showMessage("File is unsaved.")
@@ -485,19 +649,30 @@ class mainWindow(QMainWindow):
 			self.textArea.copy()
 
 	def developer_tools(self):
-		webbrowser.open_new_tab("https://github.com/codeguru-eng/SM-FastEdit")
+		self.toolWindow = QWidget()
+		self.toolWindow.setWindowTitle("Developer - SM FastEdit")
+		layout = QVBoxLayout(self.toolWindow)
+		webView = WebBrowser.Browser()
+		webView.load(QUrl("https://github.com/codeguru-eng/SM-FastEdit"))
+		layout.addWidget(webView)
+		layout.setContentsMargins(0,0,0,0)
+		self.toolWindow.showMaximized()
 	def about(self):
 		aboutDlg = QMessageBox()
-		aboutDlg.setIcon(QMessageBox.Information)
+		aboutDlg.setWindowTitle("About")
+		aboutDlg.setIcon(False)
+		aboutDlg.setWindowFlag(Qt.FramelessWindowHint)
+		aboutDlg.setIcon(False)
 		text = f"""
-FastEdit is a open source texteditor created and maintained by SM Technology. It is only for PYTHON programmers.
-Visit smtechnology.com/applications to know more.
-	Version: {version}
-
-© Copyright 2021 SM Technology
+<h1 style="color: blue;">{app_name}</h1>
+<ul>
+<li><b>Version: </b>{version}</li>
+<li><b>OS: </b>{system} {system_version}</li>
+<li><b>Written In: </b>{py} {py_version}</li>
+</ul>
+<p>© Copyright 2021 <b>SM Technology</b></p>
 		"""
 		font1 = QFont()
-		font1.setPointSize(10)
 		font1.setFamily("Verdana")
 		aboutDlg.setFont(font1)
 		aboutDlg.setText(text)
@@ -668,11 +843,6 @@ Visit smtechnology.com/applications to know more.
 		layout.addWidget(area)
 		layout.setContentsMargins(0,0,0,0)
 		self.docmtation.showMaximized()
-
-	def open_in_browser(self):
-		self.statusBarMain.showMessage("Opening....",5000)
-		webbrowser.open_new_tab(self.path)
-		self.statusBarMain.showMessage("Opened in browser",5000)
 	def new_window(self):
 		self.w = mainWindow()
 		self.w.showMaximized()
@@ -687,12 +857,13 @@ Visit smtechnology.com/applications to know more.
 		self.textArea.setFocus()
 		self.update_title()
 		self.statusBar().showMessage("Created a New File", 5000)
+		self.a6.setDisabled(True)
 	def close_file(self):
 		self.path = "untitled"
 		self.textArea.clear()
 		self.update_title()
 	def open_file(self):
-		path, _ = QFileDialog.getOpenFileName(self, "Open file", "","All files (*.*)")
+		path, _ = QFileDialog.getOpenFileName(self, "Open file", "","HTML files (*.html);;CSS files (*.css);;JS files (*.js);;All files (*.*)")
 		if path:
 			try:
 				with open(path, 'rU') as f:
@@ -708,14 +879,14 @@ Visit smtechnology.com/applications to know more.
 				file_ext = split_tUp[1]
 				self.b.setText(file_ext)
 				self.bText = self.b.text()
+				self.a6.setEnabled(True)
 	def save_file(self):
 		if self.path is "untitled":
 			return self.save_as_file()
 		self._save_to_path(self.path)
 		self.statusBar().showMessage("Saved file", 5000)
 	def save_as_file(self):
-		path, _ = QFileDialog.getSaveFileName(self, "Save file", "",
-							 "All files (*.*)")
+		path, _ = QFileDialog.getSaveFileName(self, "Save file", "", "HTML files (*.html);;CSS files (*.css);;JS files (*.js);;All files (*.*)")
 		if not path:
 			return
 		self._save_to_path(path)
@@ -732,6 +903,7 @@ Visit smtechnology.com/applications to know more.
 		else:
 			self.path = path
 			self.update_title()
+			self.a6.setEnabled(True)
 	def exit(self):
 		self.close()
 	def closeEvent(self, e):
